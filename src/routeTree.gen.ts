@@ -10,33 +10,252 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ElimuRouteImport } from './routes/elimu'
+import { Route as FursaRouteImport } from './routes/fursa'
+import { Route as HabariRouteImport } from './routes/habari'
+import { Route as KuhusuRouteImport } from './routes/kuhusu'
+import { Route as MajukumuRouteImport } from './routes/majukumu'
+import { Route as MatukioRouteImport } from './routes/matukio'
+import { Route as MawasilianoRouteImport } from './routes/mawasiliano'
+import { Route as MbungeRouteImport } from './routes/mbunge'
+import { Route as MiradiRouteImport } from './routes/miradi'
+import { Route as NyarakaRouteImport } from './routes/nyaraka'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ShirikiRouteImport } from './routes/shiriki'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ElimuRoute = ElimuRouteImport.update({
+  id: '/elimu',
+  path: '/elimu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FursaRoute = FursaRouteImport.update({
+  id: '/fursa',
+  path: '/fursa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabariRoute = HabariRouteImport.update({
+  id: '/habari',
+  path: '/habari',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KuhusuRoute = KuhusuRouteImport.update({
+  id: '/kuhusu',
+  path: '/kuhusu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MajukumuRoute = MajukumuRouteImport.update({
+  id: '/majukumu',
+  path: '/majukumu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatukioRoute = MatukioRouteImport.update({
+  id: '/matukio',
+  path: '/matukio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MawasilianoRoute = MawasilianoRouteImport.update({
+  id: '/mawasiliano',
+  path: '/mawasiliano',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MbungeRoute = MbungeRouteImport.update({
+  id: '/mbunge',
+  path: '/mbunge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiradiRoute = MiradiRouteImport.update({
+  id: '/miradi',
+  path: '/miradi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NyarakaRoute = NyarakaRouteImport.update({
+  id: '/nyaraka',
+  path: '/nyaraka',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShirikiRoute = ShirikiRouteImport.update({
+  id: '/shiriki',
+  path: '/shiriki',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/elimu': typeof ElimuRoute
+  '/fursa': typeof FursaRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mawasiliano': typeof MawasilianoRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
+  '/nyaraka': typeof NyarakaRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shiriki': typeof ShirikiRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/elimu': typeof ElimuRoute
+  '/fursa': typeof FursaRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mawasiliano': typeof MawasilianoRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
+  '/nyaraka': typeof NyarakaRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shiriki': typeof ShirikiRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/elimu': typeof ElimuRoute
+  '/fursa': typeof FursaRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mawasiliano': typeof MawasilianoRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
+  '/nyaraka': typeof NyarakaRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/shiriki': typeof ShirikiRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/elimu'
+    | '/fursa'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mawasiliano'
+    | '/mbunge'
+    | '/miradi'
+    | '/nyaraka'
+    | '/privacy'
+    | '/reset-password'
+    | '/shiriki'
+    | '/sitemap.xml'
+    | '/admin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/elimu'
+    | '/fursa'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mawasiliano'
+    | '/mbunge'
+    | '/miradi'
+    | '/nyaraka'
+    | '/privacy'
+    | '/reset-password'
+    | '/shiriki'
+    | '/sitemap.xml'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/elimu'
+    | '/fursa'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mawasiliano'
+    | '/mbunge'
+    | '/miradi'
+    | '/nyaraka'
+    | '/privacy'
+    | '/reset-password'
+    | '/shiriki'
+    | '/sitemap.xml'
+    | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  ElimuRoute: typeof ElimuRoute
+  FursaRoute: typeof FursaRoute
+  HabariRoute: typeof HabariRoute
+  KuhusuRoute: typeof KuhusuRoute
+  MajukumuRoute: typeof MajukumuRoute
+  MatukioRoute: typeof MatukioRoute
+  MawasilianoRoute: typeof MawasilianoRoute
+  MbungeRoute: typeof MbungeRoute
+  MiradiRoute: typeof MiradiRoute
+  NyarakaRoute: typeof NyarakaRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  ShirikiRoute: typeof ShirikiRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +267,157 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/elimu': {
+      id: '/elimu'
+      path: '/elimu'
+      fullPath: '/elimu'
+      preLoaderRoute: typeof ElimuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fursa': {
+      id: '/fursa'
+      path: '/fursa'
+      fullPath: '/fursa'
+      preLoaderRoute: typeof FursaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habari': {
+      id: '/habari'
+      path: '/habari'
+      fullPath: '/habari'
+      preLoaderRoute: typeof HabariRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kuhusu': {
+      id: '/kuhusu'
+      path: '/kuhusu'
+      fullPath: '/kuhusu'
+      preLoaderRoute: typeof KuhusuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/majukumu': {
+      id: '/majukumu'
+      path: '/majukumu'
+      fullPath: '/majukumu'
+      preLoaderRoute: typeof MajukumuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matukio': {
+      id: '/matukio'
+      path: '/matukio'
+      fullPath: '/matukio'
+      preLoaderRoute: typeof MatukioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mawasiliano': {
+      id: '/mawasiliano'
+      path: '/mawasiliano'
+      fullPath: '/mawasiliano'
+      preLoaderRoute: typeof MawasilianoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mbunge': {
+      id: '/mbunge'
+      path: '/mbunge'
+      fullPath: '/mbunge'
+      preLoaderRoute: typeof MbungeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/miradi': {
+      id: '/miradi'
+      path: '/miradi'
+      fullPath: '/miradi'
+      preLoaderRoute: typeof MiradiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nyaraka': {
+      id: '/nyaraka'
+      path: '/nyaraka'
+      fullPath: '/nyaraka'
+      preLoaderRoute: typeof NyarakaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/shiriki': {
+      id: '/shiriki'
+      path: '/shiriki'
+      fullPath: '/shiriki'
+      preLoaderRoute: typeof ShirikiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  ElimuRoute: ElimuRoute,
+  FursaRoute: FursaRoute,
+  HabariRoute: HabariRoute,
+  KuhusuRoute: KuhusuRoute,
+  MajukumuRoute: MajukumuRoute,
+  MatukioRoute: MatukioRoute,
+  MawasilianoRoute: MawasilianoRoute,
+  MbungeRoute: MbungeRoute,
+  MiradiRoute: MiradiRoute,
+  NyarakaRoute: NyarakaRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  ShirikiRoute: ShirikiRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
