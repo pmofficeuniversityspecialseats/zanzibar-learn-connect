@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ElimuRouteImport } from './routes/elimu'
+import { Route as HabariRouteImport } from './routes/habari'
+import { Route as KuhusuRouteImport } from './routes/kuhusu'
+import { Route as MajukumuRouteImport } from './routes/majukumu'
+import { Route as MatukioRouteImport } from './routes/matukio'
+import { Route as MbungeRouteImport } from './routes/mbunge'
+import { Route as MiradiRouteImport } from './routes/miradi'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ElimuRoute = ElimuRouteImport.update({
+  id: '/elimu',
+  path: '/elimu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HabariRoute = HabariRouteImport.update({
+  id: '/habari',
+  path: '/habari',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KuhusuRoute = KuhusuRouteImport.update({
+  id: '/kuhusu',
+  path: '/kuhusu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MajukumuRoute = MajukumuRouteImport.update({
+  id: '/majukumu',
+  path: '/majukumu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MatukioRoute = MatukioRouteImport.update({
+  id: '/matukio',
+  path: '/matukio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MbungeRoute = MbungeRouteImport.update({
+  id: '/mbunge',
+  path: '/mbunge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MiradiRoute = MiradiRouteImport.update({
+  id: '/miradi',
+  path: '/miradi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/elimu': typeof ElimuRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/elimu': typeof ElimuRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/elimu': typeof ElimuRoute
+  '/habari': typeof HabariRoute
+  '/kuhusu': typeof KuhusuRoute
+  '/majukumu': typeof MajukumuRoute
+  '/matukio': typeof MatukioRoute
+  '/mbunge': typeof MbungeRoute
+  '/miradi': typeof MiradiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/elimu'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mbunge'
+    | '/miradi'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/elimu'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mbunge'
+    | '/miradi'
+  id:
+    | '__root__'
+    | '/'
+    | '/elimu'
+    | '/habari'
+    | '/kuhusu'
+    | '/majukumu'
+    | '/matukio'
+    | '/mbunge'
+    | '/miradi'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ElimuRoute: typeof ElimuRoute
+  HabariRoute: typeof HabariRoute
+  KuhusuRoute: typeof KuhusuRoute
+  MajukumuRoute: typeof MajukumuRoute
+  MatukioRoute: typeof MatukioRoute
+  MbungeRoute: typeof MbungeRoute
+  MiradiRoute: typeof MiradiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +143,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/elimu': {
+      id: '/elimu'
+      path: '/elimu'
+      fullPath: '/elimu'
+      preLoaderRoute: typeof ElimuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/habari': {
+      id: '/habari'
+      path: '/habari'
+      fullPath: '/habari'
+      preLoaderRoute: typeof HabariRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kuhusu': {
+      id: '/kuhusu'
+      path: '/kuhusu'
+      fullPath: '/kuhusu'
+      preLoaderRoute: typeof KuhusuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/majukumu': {
+      id: '/majukumu'
+      path: '/majukumu'
+      fullPath: '/majukumu'
+      preLoaderRoute: typeof MajukumuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/matukio': {
+      id: '/matukio'
+      path: '/matukio'
+      fullPath: '/matukio'
+      preLoaderRoute: typeof MatukioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mbunge': {
+      id: '/mbunge'
+      path: '/mbunge'
+      fullPath: '/mbunge'
+      preLoaderRoute: typeof MbungeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/miradi': {
+      id: '/miradi'
+      path: '/miradi'
+      fullPath: '/miradi'
+      preLoaderRoute: typeof MiradiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ElimuRoute: ElimuRoute,
+  HabariRoute: HabariRoute,
+  KuhusuRoute: KuhusuRoute,
+  MajukumuRoute: MajukumuRoute,
+  MatukioRoute: MatukioRoute,
+  MbungeRoute: MbungeRoute,
+  MiradiRoute: MiradiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
