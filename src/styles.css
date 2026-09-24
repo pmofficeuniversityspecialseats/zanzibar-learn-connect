@@ -167,3 +167,13 @@
     color: var(--foreground);
   }
 }
+
+@utility bg-hero-overlay {
+  background: linear-gradient(90deg, color-mix(in oklab, var(--primary) 94%, transparent) 0%, color-mix(in oklab, var(--primary) 72%, transparent) 55%, color-mix(in oklab, var(--primary) 24%, transparent) 100%);
+}
+
+@media (max-width: 640px) {
+  .bg-hero-overlay {
+    background: linear-gradient(180deg, color-mix(in oklab, var(--primary) 35%, transparent) 0%, color-mix(in oklab, var(--primary) 96%, transparent) 78%);
+  }
+}
