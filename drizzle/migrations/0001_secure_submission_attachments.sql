@@ -1,0 +1,3 @@
+CREATE POLICY "Public uploads submission attachments" ON storage.objects FOR INSERT TO anon, authenticated WITH CHECK (bucket_id = 'public-submissions' AND (storage.foldername(name))[1] = 'incoming' AND lower(storage.extension(name)) IN ('pdf','jpg','jpeg','png'));
+CREATE POLICY "Reviewers read submission attachments" ON storage.objects FOR SELECT TO authenticated USING (bucket_id = 'public-submissions' AND (public.has_role(auth.uid(), 'admin') OR public.has_role(auth.uid(), 'reviewer')));
+CREATE POLICY "Admins delete submission attachments" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'public-submissions' AND public.has_role(auth.uid(), 'admin'));
