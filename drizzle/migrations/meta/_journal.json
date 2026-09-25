@@ -15,6 +15,20 @@
       "when": 1790243299467,
       "tag": "0001_secure_submission_attachments",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790309203728,
+      "tag": "0002_cms_expansion",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1790309221738,
+      "tag": "0003_site_media_storage_policies",
+      "breakpoints": true
     }
   ]
 }
