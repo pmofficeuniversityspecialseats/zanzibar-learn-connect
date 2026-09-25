@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          content_id: string | null
+          created_at: string
+          event_type: string
+          id: number
+          path: string
+        }
+        Insert: {
+          content_id?: string | null
+          created_at?: string
+          event_type: string
+          id?: never
+          path?: string
+        }
+        Update: {
+          content_id?: string | null
+          created_at?: string
+          event_type?: string
+          id?: never
+          path?: string
+        }
+        Relationships: []
+      }
       audit_logs: {
         Row: {
           action: string
@@ -49,6 +73,7 @@ export type Database = {
       }
       content_items: {
         Row: {
+          author: string | null
           body_en: string
           body_sw: string
           category: string
@@ -57,23 +82,30 @@ export type Database = {
           deadline: string | null
           document_url: string | null
           event_date: string | null
+          external_id: string | null
           file_size: string | null
+          gallery: string[]
           id: string
           image_url: string | null
+          is_featured: boolean
           kind: string
           location: string | null
           organization: string | null
           project_status: string | null
           published_at: string | null
           slug: string
+          source: string
           status: Database["public"]["Enums"]["content_status"]
           summary_en: string
           summary_sw: string
+          tags: string[]
           title_en: string
           title_sw: string
           updated_at: string
+          video_url: string | null
         }
         Insert: {
+          author?: string | null
           body_en?: string
           body_sw?: string
           category?: string
@@ -82,23 +114,30 @@ export type Database = {
           deadline?: string | null
           document_url?: string | null
           event_date?: string | null
+          external_id?: string | null
           file_size?: string | null
+          gallery?: string[]
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           kind: string
           location?: string | null
           organization?: string | null
           project_status?: string | null
           published_at?: string | null
           slug: string
+          source?: string
           status?: Database["public"]["Enums"]["content_status"]
           summary_en?: string
           summary_sw?: string
+          tags?: string[]
           title_en: string
           title_sw: string
           updated_at?: string
+          video_url?: string | null
         }
         Update: {
+          author?: string | null
           body_en?: string
           body_sw?: string
           category?: string
@@ -107,21 +146,96 @@ export type Database = {
           deadline?: string | null
           document_url?: string | null
           event_date?: string | null
+          external_id?: string | null
           file_size?: string | null
+          gallery?: string[]
           id?: string
           image_url?: string | null
+          is_featured?: boolean
           kind?: string
           location?: string | null
           organization?: string | null
           project_status?: string | null
           published_at?: string | null
           slug?: string
+          source?: string
           status?: Database["public"]["Enums"]["content_status"]
           summary_en?: string
           summary_sw?: string
+          tags?: string[]
           title_en?: string
           title_sw?: string
           updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      important_links: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          sort_order: number
+          title_en: string
+          title_sw: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title_en: string
+          title_sw: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          sort_order?: number
+          title_en?: string
+          title_sw?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      media_assets: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          file_path: string
+          id: string
+          is_featured: boolean
+          media_type: string
+          mime_type: string | null
+          name: string
+          public_url: string
+          size_bytes: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          file_path: string
+          id?: string
+          is_featured?: boolean
+          media_type: string
+          mime_type?: string | null
+          name: string
+          public_url: string
+          size_bytes?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          file_path?: string
+          id?: string
+          is_featured?: boolean
+          media_type?: string
+          mime_type?: string | null
+          name?: string
+          public_url?: string
+          size_bytes?: number
         }
         Relationships: []
       }
@@ -206,6 +320,96 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      slider_items: {
+        Row: {
+          caption_en: string
+          caption_sw: string
+          created_at: string
+          duration_seconds: number
+          id: string
+          is_active: boolean
+          link_url: string | null
+          media_type: string
+          media_url: string
+          sort_order: number
+          title_en: string
+          title_sw: string
+        }
+        Insert: {
+          caption_en?: string
+          caption_sw?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          is_active?: boolean
+          link_url?: string | null
+          media_type?: string
+          media_url: string
+          sort_order?: number
+          title_en?: string
+          title_sw?: string
+        }
+        Update: {
+          caption_en?: string
+          caption_sw?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          is_active?: boolean
+          link_url?: string | null
+          media_type?: string
+          media_url?: string
+          sort_order?: number
+          title_en?: string
+          title_sw?: string
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          platform: string
+          sort_order: number
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          platform: string
+          sort_order?: number
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          platform?: string
+          sort_order?: number
+          url?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -239,6 +443,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_staff: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "editor" | "reviewer"
