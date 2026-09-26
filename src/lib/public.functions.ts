@@ -40,8 +40,8 @@ export const getSiteInfo = createServerFn({ method: "GET" }).handler(async () =>
   ]);
   const map = Object.fromEntries((settings.data ?? []).map((s) => [s.key, s.value]));
   return {
-    general: (map.general ?? {}) as GeneralSettings,
-    homepage: (map.homepage ?? {}) as HomepageSettings,
+    general: (map["general"] ?? {}) as GeneralSettings,
+    homepage: (map["homepage"] ?? {}) as HomepageSettings,
     links: links.data ?? [],
     socials: socials.data ?? [],
   };
@@ -148,7 +148,7 @@ export async function maybeSyncYoutube(force = false) {
   const xml = await res.text();
   const decode = (t: string) => t.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
   const entries = [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)].slice(0, 15).map((m) => {
-    const e = m[1];
+    const e = m[1] ?? "";
     const get = (re: RegExp) => decode(e.match(re)?.[1]?.trim() ?? "");
     const vid = get(/<yt:videoId>([^<]+)<\/yt:videoId>/);
     const description = get(/<media:description>([\s\S]*?)<\/media:description>/);
