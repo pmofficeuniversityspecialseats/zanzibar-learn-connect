@@ -26,7 +26,9 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShirikiRouteImport } from './routes/shiriki'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as TafutaRouteImport } from './routes/tafuta'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as ChapishoSlugRouteImport } from './routes/chapisho.$slug'
 import { Route as ApiPublicMediaSplatRouteImport } from './routes/api/public/media/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -113,10 +115,20 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TafutaRoute = TafutaRouteImport.update({
+  id: '/tafuta',
+  path: '/tafuta',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ChapishoSlugRoute = ChapishoSlugRouteImport.update({
+  id: '/chapisho/$slug',
+  path: '/chapisho/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicMediaSplatRoute = ApiPublicMediaSplatRouteImport.update({
   id: '/api/public/media/$',
@@ -141,7 +153,9 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/shiriki': typeof ShirikiRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tafuta': typeof TafutaRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/chapisho/$slug': typeof ChapishoSlugRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesByTo {
@@ -161,7 +175,9 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/shiriki': typeof ShirikiRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tafuta': typeof TafutaRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/chapisho/$slug': typeof ChapishoSlugRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRoutesById {
@@ -183,7 +199,9 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/shiriki': typeof ShirikiRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tafuta': typeof TafutaRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/chapisho/$slug': typeof ChapishoSlugRoute
   '/api/public/media/$': typeof ApiPublicMediaSplatRoute
 }
 export interface FileRouteTypes {
@@ -205,7 +223,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shiriki'
     | '/sitemap.xml'
+    | '/tafuta'
     | '/admin'
+    | '/chapisho/$slug'
     | '/api/public/media/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -225,7 +245,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shiriki'
     | '/sitemap.xml'
+    | '/tafuta'
     | '/admin'
+    | '/chapisho/$slug'
     | '/api/public/media/$'
   id:
     | '__root__'
@@ -246,7 +268,9 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/shiriki'
     | '/sitemap.xml'
+    | '/tafuta'
     | '/_authenticated/admin'
+    | '/chapisho/$slug'
     | '/api/public/media/$'
   fileRoutesById: FileRoutesById
 }
@@ -268,6 +292,8 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShirikiRoute: typeof ShirikiRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TafutaRoute: typeof TafutaRoute
+  ChapishoSlugRoute: typeof ChapishoSlugRoute
   ApiPublicMediaSplatRoute: typeof ApiPublicMediaSplatRoute
 }
 
@@ -392,12 +418,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tafuta': {
+      id: '/tafuta'
+      path: '/tafuta'
+      fullPath: '/tafuta'
+      preLoaderRoute: typeof TafutaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/chapisho/$slug': {
+      id: '/chapisho/$slug'
+      path: '/chapisho/$slug'
+      fullPath: '/chapisho/$slug'
+      preLoaderRoute: typeof ChapishoSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/media/$': {
       id: '/api/public/media/$'
@@ -438,6 +478,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ShirikiRoute: ShirikiRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TafutaRoute: TafutaRoute,
+  ChapishoSlugRoute: ChapishoSlugRoute,
   ApiPublicMediaSplatRoute: ApiPublicMediaSplatRoute,
 }
 export const routeTree = rootRouteImport
