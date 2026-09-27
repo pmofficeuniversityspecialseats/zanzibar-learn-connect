@@ -23,7 +23,7 @@ function SearchPage() {
   const navigate = useNavigate({ from: "/tafuta" });
   const { tr, pick, language } = useLanguage();
   const [term, setTerm] = useState(q);
-  const { data, isFetching } = useQuery({ queryKey: ["search", q, kind], queryFn: () => searchSite({ data: { q, kind: kind || undefined } }), enabled: q.trim().length >= 2 });
+  const { data, isFetching } = useQuery({ queryKey: ["search", q, kind], queryFn: () => searchSite({ data: kind ? { q, kind } : { q } }), enabled: q.trim().length >= 2 });
   const groups = kinds.slice(1).map(([k, sw, en]) => [k, language === "en" ? en : sw, (data?.items ?? []).filter((i) => i.kind === k)] as const).filter(([, , items]) => items.length);
   return (
     <>
