@@ -1,14 +1,121 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type FormEvent } from "react";
-import { LockKeyhole } from "lucide-react";
+import { useEffect, useState, type FormEvent } from "react";
+import { Eye, EyeOff, KeyRound, LockKeyhole, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Kuingia kwa Wasimamizi | Ofisi ya Mbunge" }, { name: "description", content: "Eneo salama la wasimamizi wa tovuti." }, { property: "og:title", content: "Kuingia kwa Wasimamizi" }, { property: "og:description", content: "Eneo salama la usimamizi wa maudhui." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: AuthPage,
+  head: () => ({ meta: [{ title: "Kuingia kwa Wasimamizi | Ofisi ya Mbunge" }, { name: "description", content: "Eneo salama la wasimamizi wa tovuti." }, { property: "og:title", content: "Kuingia kwa Wasimamizi" }, { property: "og:description", content: "Eneo salama la usimamizi wa maudhui." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
+  component: AuthPage,
 });
-function AuthPage(){const[mode,setMode]=useState<"signin"|"signup">("signin");const[loading,setLoading]=useState(false);const navigate=useNavigate();async function submit(e:FormEvent<HTMLFormElement>){e.preventDefault();setLoading(true);const fd=new FormData(e.currentTarget);const email=String(fd.get("email"));const password=String(fd.get("password"));try{if(mode==="signin"){const{error}=await supabase.auth.signInWithPassword({email,password});if(error)throw error;await navigate({to:"/admin"});}else{const{data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin+"/auth"}});if(error)throw error;if(!data.session){toast.success("Angalia barua pepe kuthibitisha akaunti. Ruhusa ya usimamizi hutolewa na msimamizi mkuu.");setMode("signin");}}}catch(err){toast.error(err instanceof Error?err.message:"Jaribu tena.");}finally{setLoading(false);}}async function google(){const result=await lovable.auth.signInWithOAuth("google",{redirect_uri:window.location.origin+"/auth"});if(result.error)toast.error(result.error.message);else if(!result.redirected)await navigate({to:"/admin"});}return <section className="min-h-[70vh] bg-secondary px-4 py-16"><div className="mx-auto max-w-md border border-border bg-background p-7 shadow-institutional"><LockKeyhole className="size-8 text-primary"/><h1 className="mt-5 font-display text-2xl font-bold">{mode==="signin"?"Ingia kwenye Usimamizi":"Fungua Akaunti"}</h1><p className="mt-2 text-sm leading-6 text-muted-foreground">Akaunti mpya haitapewa ruhusa ya usimamizi hadi idhinishwe rasmi.</p><form onSubmit={submit} className="mt-7 space-y-5"><div><Label htmlFor="email">Barua pepe</Label><Input id="email" name="email" type="email" required className="mt-2"/></div><div><Label htmlFor="password">Nenosiri</Label><Input id="password" name="password" type="password" required minLength={8} className="mt-2"/></div><Button className="w-full" disabled={loading}>{loading?"Subiri...":mode==="signin"?"Ingia":"Fungua Akaunti"}</Button></form><div className="my-5 flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border"/>AU<span className="h-px flex-1 bg-border"/></div><Button type="button" variant="outline" className="w-full" onClick={google}>Endelea na Google</Button><Button type="button" variant="link" className="mt-3 w-full" onClick={()=>setMode(mode==="signin"?"signup":"signin")}>{mode==="signin"?"Fungua akaunti":"Nina akaunti tayari"}</Button></div></section>}
+
+function AuthPage() {
+  const [mode, setMode] = useState<"signin" | "recovery">("signin");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      if (data.session) void navigate({ to: "/admin", replace: true });
+    });
+  }, [navigate]);
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const email = String(fd.get("email") ?? "").trim().toLowerCase();
+
+    try {
+      if (mode === "recovery") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        toast.success("Kiungo cha kuweka nenosiri jipya kimetumwa. Angalia barua pepe yako.");
+        setMode("signin");
+        return;
+      }
+
+      const password = String(fd.get("password") ?? "");
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      toast.success("Umeingia salama.");
+      await navigate({ to: "/admin", replace: true });
+    } catch (error) {
+      const message = error instanceof Error ? error.message.toLowerCase() : "";
+      if (message.includes("invalid login credentials")) {
+        toast.error("Barua pepe au nenosiri si sahihi. Jaribu tena au tumia ‘Umesahau nenosiri?’");
+      } else if (message.includes("email not confirmed")) {
+        toast.error("Thibitisha barua pepe yako kwanza, kisha ujaribu tena.");
+      } else {
+        toast.error("Imeshindikana kukamilisha ombi. Tafadhali jaribu tena.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <section className="min-h-[70vh] bg-secondary px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-md border border-border bg-background p-6 shadow-institutional sm:p-8">
+        <div className="flex size-12 items-center justify-center bg-primary text-primary-foreground">
+          {mode === "signin" ? <LockKeyhole className="size-6" /> : <KeyRound className="size-6" />}
+        </div>
+        <p className="mt-5 text-xs font-bold uppercase text-gold">Eneo salama la wasimamizi</p>
+        <h1 className="mt-2 font-display text-2xl font-bold">
+          {mode === "signin" ? "Ingia kwenye Dashibodi" : "Rejesha Nenosiri"}
+        </h1>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">
+          {mode === "signin"
+            ? "Tumia akaunti ya ofisi iliyoidhinishwa kuendesha maudhui ya tovuti."
+            : "Tutakutumia kiungo salama cha kuweka nenosiri jipya."}
+        </p>
+
+        <form onSubmit={submit} className="mt-7 space-y-5">
+          <div>
+            <Label htmlFor="email">Barua pepe</Label>
+            <div className="relative mt-2">
+              <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input id="email" name="email" type="email" autoComplete="email" required className="pl-10" />
+            </div>
+          </div>
+
+          {mode === "signin" && (
+            <div>
+              <div className="flex items-center justify-between gap-3">
+                <Label htmlFor="password">Nenosiri</Label>
+                <Button type="button" variant="link" className="h-auto p-0 text-xs" onClick={() => setMode("recovery")}>
+                  Umesahau nenosiri?
+                </Button>
+              </div>
+              <div className="relative mt-2">
+                <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete="current-password" required minLength={8} className="pr-11" />
+                <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0" onClick={() => setShowPassword((value) => !value)} aria-label={showPassword ? "Ficha nenosiri" : "Onyesha nenosiri"}>
+                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                </Button>
+              </div>
+            </div>
+          )}
+
+          <Button className="w-full" disabled={loading}>
+            {loading ? "Tafadhali subiri..." : mode === "signin" ? "Ingia kwenye Dashibodi" : "Tuma Kiungo cha Urejeshaji"}
+          </Button>
+        </form>
+
+        {mode === "recovery" && (
+          <Button type="button" variant="link" className="mt-3 w-full" onClick={() => setMode("signin")}>
+            Rudi kwenye ukurasa wa kuingia
+          </Button>
+        )}
+        <p className="mt-6 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">
+          Ufikiaji huu ni kwa wasimamizi walioidhinishwa pekee.
+        </p>
+      </div>
+    </section>
+  );
+}
