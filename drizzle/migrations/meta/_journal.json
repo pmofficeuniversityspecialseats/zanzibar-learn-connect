@@ -29,6 +29,13 @@
       "when": 1790309221738,
       "tag": "0003_site_media_storage_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790666811860,
+      "tag": "0004_add_super_admin_finance_roles",
+      "breakpoints": true
     }
   ]
 }
