@@ -29,6 +29,34 @@
       "when": 1790309221738,
       "tag": "0003_site_media_storage_policies",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1790666811860,
+      "tag": "0004_add_super_admin_finance_roles",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790666822130,
+      "tag": "0005_super_admin_inherits_all",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790666831136,
+      "tag": "0006_roles_managed_by_super_admin",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1790666845670,
+      "tag": "0007_fix_roles_policy_recursion",
+      "breakpoints": true
     }
   ]
 }
