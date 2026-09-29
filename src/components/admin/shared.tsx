@@ -38,7 +38,7 @@ export async function uploadFile(file: File, folder = "uploads") {
   if (file.size > LIMITS[type] * 1024 * 1024) throw new Error(`${file.name}: faili ni kubwa kuliko ${LIMITS[type]}MB`);
   const ext = (file.name.split(".").pop() ?? "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
   const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-  const { error } = await supabase.storage.from("site-media").upload(path, file, { contentType: file.type || undefined });
+  const { error } = await supabase.storage.from("site-media").upload(path, file, file.type ? { contentType: file.type } : {});
   if (error) throw new Error(`${file.name}: imeshindikana kupakia`);
   const row = (await registerMedia({
     data: { name: file.name.slice(0, 200), file_path: path, mime_type: file.type || "application/octet-stream", size_bytes: file.size, media_type: type },
