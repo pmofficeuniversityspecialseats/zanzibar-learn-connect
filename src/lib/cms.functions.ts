@@ -9,14 +9,19 @@ async function rolesOf(ctx: Ctx) {
   const { data } = await ctx.supabase.from("user_roles").select("role").eq("user_id", ctx.userId);
   return (data ?? []).map((r: { role: string }) => r.role) as string[];
 }
+const has = (roles: string[], ...r: string[]) => roles.includes("super_admin") || r.some((x) => roles.includes(x));
 async function requireStaff(ctx: Ctx) {
   const roles = await rolesOf(ctx);
-  if (!roles.includes("admin") && !roles.includes("editor")) throw new Error("Huna ruhusa ya kufanya kitendo hiki.");
+  if (!has(roles, "admin", "editor")) throw new Error("Huna ruhusa ya kufanya kitendo hiki.");
   return roles;
 }
 async function requireAdmin(ctx: Ctx) {
   const roles = await rolesOf(ctx);
-  if (!roles.includes("admin")) throw new Error("Kitendo hiki kinahitaji msimamizi mkuu.");
+  if (!has(roles, "admin")) throw new Error("Kitendo hiki kinahitaji msimamizi (Admin).");
+}
+async function requireSuper(ctx: Ctx) {
+  const roles = await rolesOf(ctx);
+  if (!roles.includes("super_admin")) throw new Error("Kitendo hiki kinahitaji Super Admin.");
 }
 function check<T>(res: { data: T; error: { message: string } | null }) {
   if (res.error) throw new Error(res.error.message);
@@ -27,14 +32,23 @@ export const getMyAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const roles = await rolesOf(context);
-    return { roles, isStaff: roles.includes("admin") || roles.includes("editor") || roles.includes("reviewer"), isAdmin: roles.includes("admin") };
+    return {
+      roles,
+      isSuper: roles.includes("super_admin"),
+      isAdmin: has(roles, "admin"),
+      canContent: has(roles, "admin", "editor"),
+      canSubmissions: has(roles, "admin", "reviewer"),
+      canFinance: has(roles, "admin", "finance"),
+      isStaff: roles.length > 0,
+    };
   });
 
 export const getDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await requireStaff(context);
-    const sb = (context.supabase as any);
+    const myRoles = await rolesOf(context);
+    if (!has(myRoles, "admin", "editor", "finance", "reviewer")) throw new Error("Huna ruhusa.");
+    const sb = has(myRoles, "admin", "editor") ? (context.supabase as any) : (await import("@/integrations/supabase/client.server")).supabaseAdmin as any;
     const count = async (q: any) => (await q).count ?? 0;
     const c = () => sb.from("content_items").select("id", { count: "exact", head: true });
     const since = new Date(Date.now() - 30 * 86400000).toISOString();
@@ -291,7 +305,7 @@ export const listSubmissions = createServerFn({ method: "GET" })
   .inputValidator((d: { status?: string }) => z.object({ status: z.string().max(20).optional() }).parse(d))
   .handler(async ({ context, data }) => {
     const roles = await rolesOf(context);
-    if (!roles.includes("admin") && !roles.includes("reviewer")) throw new Error("Huna ruhusa.");
+    if (!has(roles, "admin", "reviewer")) throw new Error("Huna ruhusa.");
     let q = (context.supabase as any).from("public_submissions").select("*").order("created_at", { ascending: false }).limit(100);
     if (data.status && data.status !== "all") q = q.eq("status", data.status);
     return check(await q) ?? [];
@@ -303,7 +317,7 @@ export const updateSubmission = createServerFn({ method: "POST" })
     z.object({ id: z.string().uuid(), status: z.enum(["new", "in_review", "closed"]), internal_notes: z.string().max(2000).optional() }).parse(d))
   .handler(async ({ context, data }) => {
     const roles = await rolesOf(context);
-    if (!roles.includes("admin") && !roles.includes("reviewer")) throw new Error("Huna ruhusa.");
+    if (!has(roles, "admin", "reviewer")) throw new Error("Huna ruhusa.");
     check(await (context.supabase as any).from("public_submissions").update({ status: data.status, internal_notes: data.internal_notes ?? null }).eq("id", data.id).select("id"));
     return { ok: true };
   });
@@ -312,7 +326,7 @@ export const updateSubmission = createServerFn({ method: "POST" })
 export const listUsers = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
-    await requireAdmin(context);
+    await requireSuper(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: users } = await supabaseAdmin.auth.admin.listUsers({ perPage: 200 });
     const roles = check(await (context.supabase as any).from("user_roles").select("user_id,role")) as { user_id: string; role: string }[];
@@ -321,11 +335,11 @@ export const listUsers = createServerFn({ method: "GET" })
 
 export const setUserRole = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d: { userId: string; role: "admin" | "editor" | "reviewer"; enabled: boolean }) =>
-    z.object({ userId: z.string().uuid(), role: z.enum(["admin", "editor", "reviewer"]), enabled: z.boolean() }).parse(d))
+  .inputValidator((d: { userId: string; role: "super_admin" | "admin" | "editor" | "finance" | "reviewer"; enabled: boolean }) =>
+    z.object({ userId: z.string().uuid(), role: z.enum(["super_admin", "admin", "editor", "finance", "reviewer"]), enabled: z.boolean() }).parse(d))
   .handler(async ({ context, data }) => {
-    await requireAdmin(context);
-    if (data.userId === context.userId && data.role === "admin" && !data.enabled) throw new Error("Huwezi kujiondolea mamlaka ya msimamizi mkuu.");
+    await requireSuper(context);
+    if (data.userId === context.userId && data.role === "super_admin" && !data.enabled) throw new Error("Huwezi kujiondolea mamlaka ya Super Admin.");
     if (data.enabled) check(await (context.supabase as any).from("user_roles").upsert({ user_id: data.userId, role: data.role }, { onConflict: "user_id,role" }).select("id"));
     else check(await (context.supabase as any).from("user_roles").delete().eq("user_id", data.userId).eq("role", data.role).select("id"));
     return { ok: true };
@@ -337,4 +351,17 @@ export const listAudit = createServerFn({ method: "GET" })
     await requireAdmin(context);
     const rows = check(await (context.supabase as any).from("audit_logs").select("id,actor_id,action,table_name,record_id,created_at,new_data,old_data").order("created_at", { ascending: false }).limit(150)) as any[];
     return rows.map((l) => ({ id: l.id, actor: l.actor_id, action: l.action, table: l.table_name, at: l.created_at, label: l.new_data?.title_sw ?? l.new_data?.name ?? l.new_data?.subject ?? l.old_data?.title_sw ?? l.old_data?.name ?? l.record_id }));
+  });
+
+export const inviteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: { email: string; password: string; role: "admin" | "editor" | "finance" | "reviewer" }) =>
+    z.object({ email: z.string().trim().email().max(255), password: z.string().min(8).max(72), role: z.enum(["admin", "editor", "finance", "reviewer"]) }).parse(d))
+  .handler(async ({ context, data }) => {
+    await requireSuper(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: created, error } = await supabaseAdmin.auth.admin.createUser({ email: data.email.toLowerCase(), password: data.password, email_confirm: true });
+    if (error || !created.user) throw new Error(error?.message.includes("already") ? "Barua pepe hii tayari ina akaunti. Mpe jukumu kwenye orodha." : "Imeshindikana kuunda akaunti.");
+    check(await (context.supabase as any).from("user_roles").insert({ user_id: created.user.id, role: data.role }).select("id"));
+    return { ok: true };
   });
