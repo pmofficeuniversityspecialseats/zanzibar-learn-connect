@@ -39,7 +39,7 @@ function blank(kind: Kind) {
     category: KINDS.find((k) => k.id === kind)!.cats[0], image_url: "", video_url: "", document_url: "", file_size: "",
     tags: [] as string[], author: "", location: "", organization: "", deadline: "", event_date: "", project_status: "planned",
     is_featured: false, status: "draft", published_at: "",
-  } as Record<string, any>;
+  } as any;
 }
 
 export function ContentManager() {
@@ -47,7 +47,7 @@ export function ContentManager() {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
   const [page, setPage] = useState(1);
-  const [editing, setEditing] = useState<Record<string, any> | null>(null);
+  const [editing, setEditing] = useState<any | null>(null);
   const qc = useQueryClient();
   const key = ["admin-content", kind, q, status, page];
   const { data, isLoading } = useQuery({ queryKey: key, queryFn: () => listAdminContent({ data: { kind, q, status, page } }) });
@@ -123,8 +123,8 @@ export function ContentManager() {
   );
 }
 
-function ContentForm({ value, onClose, onSaved }: { value: Record<string, any>; onClose: () => void; onSaved: () => void }) {
-  const [f, setF] = useState<Record<string, any>>({ ...value, event_date: toLocal(value.event_date), published_at: toLocal(value.published_at) });
+function ContentForm({ value, onClose, onSaved }: { value: any; onClose: () => void; onSaved: () => void }) {
+  const [f, setF] = useState<any>({ ...value, event_date: toLocal(value.event_date), published_at: toLocal(value.published_at) });
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
   const set = (k: string, v: unknown) => setF((p) => ({ ...p, [k]: v }));
@@ -143,10 +143,10 @@ function ContentForm({ value, onClose, onSaved }: { value: Record<string, any>; 
   }
 
   async function save(nextStatus?: string) {
-    if (f.title_sw.trim().length < 2) return toast.error("Weka kichwa cha Kiswahili.");
+    if (f.title_sw.trim().length < 2) { toast.error("Weka kichwa cha Kiswahili."); return; }
     setSaving(true);
     try {
-      const payload: Record<string, any> = {
+      const payload: any = {
         ...f,
         status: nextStatus ?? f.status,
         body_sw: toHtml(f.body_sw), body_en: toHtml(f.body_en),
